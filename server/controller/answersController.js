@@ -2,11 +2,12 @@ const dbConnection = require("../db/dbConfige");
 const { StatusCodes } = require("http-status-codes");
 
 async function getAllanswers(req, res) {
-  const { questionid } = req.body;
+  const questionId = req.params.id;
+  console.log(questionId);
   try {
     const answers = await dbConnection.query(
       "SELECT * FROM answers WHERE questionid = ?",
-      [questionid]
+      [questionId]
     );
     return res.json(answers[0]);
   } catch (error) {

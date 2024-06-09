@@ -33,7 +33,7 @@ function Register({ dispatch }) {
       return;
     }
     try {
-      await axios.post("/users/register", {
+      const { data } = await axios.post("/users/register", {
         username: usernameValue,
         firstname: firstValue,
         lastname: lastValue,
@@ -41,6 +41,7 @@ function Register({ dispatch }) {
         password: passValue,
       });
       setSuccessMessage("Registration successful");
+      localStorage.setItem("token", data.token);
       navigator("/home");
     } catch (error) {
       setErrorMessage("Something went wrong");

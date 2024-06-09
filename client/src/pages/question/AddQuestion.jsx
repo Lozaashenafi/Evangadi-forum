@@ -1,26 +1,73 @@
-import React from "react";
+import React, { useContext, useState } from "react";
 import LayOut from "../../components/layOut/LayOut";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { useRef } from "react";
+import axios from "../../axiosConfig";
+import { appState } from "../../App";
 
 function AddQuestion() {
+  const navigator = useNavigate();
+  const token = localStorage.getItem("token");
+  const { user } = useContext(appState);
+  const [selectedValue, setSelectedValue] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [successMessage, setSuccessMessage] = useState("");
+  const titleDoc = useRef();
+  const descriptionDoc = useRef();
+  const tagDoc = useRef();
+  const handleRadioChange = (event) => {
+    setSelectedValue(event.target.value);
+  };
+  const handlePost = async () => {
+    const title = titleDoc.current.value;
+    const description = descriptionDoc.current.value;
+    const tag = selectedValue;
+    const userid = user.userid;
+    // console.log(userid);
+    console.log(title, description, tag);
+    if (!title || !description || !userid) {
+      setErrorMessage("Please provide all required information");
+      return;
+    }
+    try {
+      await axios.post(
+        "/questions/ask-question",
+        {
+          title,
+          description,
+          tag,
+          userid,
+        },
+        {
+          headers: {
+            Authorization: "Bearer " + token,
+          },
+        }
+      );
+      setSuccessMessage("posted successfuly");
+      navigator("/home");
+    } catch (error) {
+      console.log(error.response);
+    }
+  };
   return (
     <>
       <LayOut>
         <section>
           <div className="mb-10 mt-5">
             <h1 className="font-semibold text-xl pb-1 text-center">
-              Stape to Write a good question
+              Steps to Write a Good Question
             </h1>
             <div className="flex justify-center mb-7">
               <ul>
                 <li className="list-disc">
-                  Summerize your problem in one line title.
+                  Summarize your problem in a one-line title.
                 </li>
                 <li className="list-disc">
-                  Describe your problem in more details.
+                  Describe your problem in more detail.
                 </li>
                 <li className="list-disc">
-                  DEscribe what you tried and what you expected to happen.
+                  Describe what you've tried and what you expected to happen.
                 </li>
                 <li className="list-disc">
                   Review your question and post it to the site.
@@ -29,109 +76,118 @@ function AddQuestion() {
             </div>
             <div>
               <h2 className="font-semibold text-xl pb-1 text-center">
-                Choose type for Your Question:
+                Choose a Tag for Your Question:
               </h2>
-              <form className="flex  justify-center gap-20 mt-6">
+              <form className="flex justify-center gap-20 mt-6">
                 <div>
                   <input
-                    className="checkbox"
-                    type="checkbox"
+                    className="radiobutton mr-2"
+                    type="radio"
                     id="reactTag"
+                    onChange={handleRadioChange}
                     name="tags"
                     value="React"
                   />
-                  <label for="reactTag">React</label>
+                  <label htmlFor="reactTag">React</label>
                   <br />
 
                   <input
-                    className="checkbox"
-                    type="checkbox"
+                    className="radiobutton mr-2"
+                    type="radio"
+                    onChange={handleRadioChange}
                     id="reactRouterTag"
                     name="tags"
                     value="React Router"
                   />
-                  <label for="reactRouterTag">React Router</label>
+                  <label htmlFor="reactRouterTag">React Router</label>
                   <br />
 
                   <input
-                    className="checkbox"
-                    type="checkbox"
+                    className="radiobutton mr-2"
+                    type="radio"
                     id="axiosTag"
+                    onChange={handleRadioChange}
                     name="tags"
                     value="Axios"
                   />
-                  <label for="axiosTag">Axios</label>
+                  <label htmlFor="axiosTag">Axios</label>
                   <br />
 
                   <input
-                    className="checkbox"
-                    type="checkbox"
+                    className="radiobutton mr-2"
+                    type="radio"
                     id="fetchAPITag"
+                    onChange={handleRadioChange}
                     name="tags"
                     value="Fetch API"
                   />
-                  <label for="fetchAPITag">Fetch API</label>
+                  <label htmlFor="fetchAPITag">Fetch API</label>
                   <br />
 
                   <input
-                    className="checkbox"
-                    type="checkbox"
+                    className="radiobutton mr-2"
+                    type="radio"
+                    onChange={handleRadioChange}
                     id="reduxTag"
                     name="tags"
                     value="Redux"
                   />
-                  <label for="reduxTag">Redux</label>
+                  <label htmlFor="reduxTag">Redux</label>
                   <br />
                 </div>
                 <div>
                   <input
-                    className="checkbox"
-                    type="checkbox"
+                    className="radiobutton mr-2"
+                    type="radio"
                     id="nodeJSTag"
                     name="tags"
                     value="Node.js"
+                    onChange={handleRadioChange}
                   />
-                  <label for="nodeJSTag">Node.js</label>
+                  <label htmlFor="nodeJSTag">Node.js</label>
                   <br />
 
                   <input
-                    className="checkbox"
-                    type="checkbox"
+                    className="radiobutton mr-2"
+                    type="radio"
                     id="expressTag"
                     name="tags"
                     value="Express.js"
+                    onChange={handleRadioChange}
                   />
-                  <label for="expressTag">Express.js</label>
+                  <label htmlFor="expressTag">Express.js</label>
                   <br />
 
                   <input
-                    className="checkbox"
-                    type="checkbox"
+                    className="radiobutton mr-2"
+                    type="radio"
                     id="mysqlTag"
                     name="tags"
                     value="MySQL"
+                    onChange={handleRadioChange}
                   />
-                  <label for="mysqlTag">MySQL</label>
+                  <label htmlFor="mysqlTag">MySQL</label>
                   <br />
 
                   <input
-                    className="checkbox"
-                    type="checkbox"
+                    className="radiobutton mr-2"
+                    type="radio"
                     id="otherTag"
                     name="tags"
                     value="Other"
+                    onChange={handleRadioChange}
                   />
-                  <label for="otherTag">Other</label>
+                  <label htmlFor="otherTag">Other</label>
                   <br />
                 </div>
               </form>
             </div>
             <h1 className="text-xl font-semibold text-center mb-5 mt-3">
-              Ask a public question
+              Ask a Public Question
             </h1>
             <div className="text-center mb-3">
               <Link to={"/home"} className="text-sm text-slate-500  ">
-                Go to Question page
+                Go to Question Page
               </Link>
             </div>
             <div className="flex justify-center">
@@ -139,6 +195,7 @@ function AddQuestion() {
                 className="textareas border-2 w-9/12 mx-auto h-10  focus:border-slate-400 mb-6 rounded-lg p-2"
                 type="text"
                 name=""
+                ref={titleDoc}
                 id=""
                 placeholder="Title"
               ></input>
@@ -147,14 +204,25 @@ function AddQuestion() {
               <textarea
                 className="textareas border-2 w-9/12 mx-auto h-28  focus:border-slate-400 mb-6 rounded-lg p-2"
                 type="text"
+                ref={descriptionDoc}
                 name=""
                 id=""
                 placeholder="Question description..."
               ></textarea>
             </div>
             <div className=" w-9/12 mx-auto">
-              <button className="bg-blue-600 py-1 text-white px-14 rounded-sm">
-                Post Your Answer
+              {errorMessage && (
+                <p className="text-red-500 text-center">{errorMessage}</p>
+              )}
+              {successMessage && (
+                <p className="text-green-500 text-center">{successMessage}</p>
+              )}
+              <button
+                type="submit"
+                onClick={handlePost}
+                className="bg-blue-600 py-1 text-white px-14 rounded-sm"
+              >
+                Post Your Question
               </button>
             </div>
           </div>

@@ -5,7 +5,6 @@ const jwt = require("jsonwebtoken");
 const dbConnection = require("../db/dbConfige");
 
 async function register(req, res) {
-  // console.log(req);
   const { username, firstname, email, lastname, password } = req.body;
 
   if (!email || !password || !firstname || !lastname || !username) {
@@ -29,21 +28,29 @@ async function register(req, res) {
         .json({ msg: "password must be at least 6 characters" });
     }
 
-    // encrypt the password
+    // Encrypt the password
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
     await dbConnection.query(
-      "INSERT INTO users(username,firstname , lastname, email, password) VALUES (?,?,?,?,?)",
+      "INSERT INTO users(username, firstname, lastname, email, password) VALUES (?,?,?,?,?)",
       [username, firstname, lastname, email, hashedPassword]
     );
-    return res.status(StatusCodes.CREATED).json({ msg: "user registerd" });
+
+    // Generate token
+    const token = jwt.sign({ username }, process.env.JWT_SECRET, {
+      expiresIn: "1d", // Expires in 1 day
+    });
+
+    // Send token in the response
+    return res
+      .status(StatusCodes.CREATED)
+      .json({ msg: "user registered", token });
   } catch (error) {
-    console.log(error.message);
+    console.error(error.message);
     return res
       .status(StatusCodes.INTERNAL_SERVER_ERROR)
       .json({ msg: "something went wrong, try again later!" });
   }
-  // Your registration logic here
 }
 
 async function login(req, res) {

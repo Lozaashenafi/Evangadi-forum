@@ -4,8 +4,13 @@ const { v4: uuidv4 } = require("uuid");
 
 async function getAllQuestion(req, res) {
   try {
-    const questions = await dbConnection.query("SELECT * FROM questions");
-    return res.json(questions[0]);
+    const [questions] = await dbConnection.query(`
+      SELECT 
+        q.*,
+        (SELECT username FROM users WHERE userid = q.userid) AS username
+      FROM questions q
+    `);
+    return res.json(questions);
   } catch (error) {
     console.error(error.message);
     return res
@@ -13,7 +18,6 @@ async function getAllQuestion(req, res) {
       .json({ msg: "Something went wrong, try again later!" });
   }
 }
-
 async function askQuestion(req, res) {
   const { title, description, userid, tag } = req.body;
   if (!title || !description || !userid) {

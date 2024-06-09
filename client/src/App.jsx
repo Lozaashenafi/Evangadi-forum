@@ -1,6 +1,5 @@
 import React, { useEffect, useState, createContext } from "react";
 import { Route, Routes, useNavigate } from "react-router-dom";
-
 import axios from "./axiosConfig";
 import Auth from "./pages/auth/Auth";
 import Home from "./pages/home/Home";
@@ -35,7 +34,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Auth />} />
           <Route path="/home" element={<Home />} />+
-          <Route path="/home/answer" element={<Answer />} />
+          <Route path="/home/answer/:id" element={<Answer />} />
           <Route path="/home/question" element={<AddQuestion />} />
         </Routes>
       </appState.Provider>

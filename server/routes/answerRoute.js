@@ -7,7 +7,7 @@ const {
 // authentication middleware
 const authMiddleware = require("../middleware/authMiddleware");
 
-router.post("/all-answers", authMiddleware, getAllanswers);
+router.get("/:id", getAllanswers);
 router.post("/give-answers", authMiddleware, giveAnswers);
 
 module.exports = router;
