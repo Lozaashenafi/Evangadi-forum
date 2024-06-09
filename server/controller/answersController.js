@@ -5,11 +5,32 @@ async function getAllanswers(req, res) {
   const questionId = req.params.id;
   console.log(questionId);
   try {
+    // const answers = await dbConnection.query(
+    //   "SELECT * FROM answers WHERE questionid = ?",
+    //   [questionId]
+    // );
     const answers = await dbConnection.query(
-      "SELECT * FROM answers WHERE questionid = ?",
+      `SELECT 
+    a.*,
+    (SELECT username FROM users WHERE userid = a.userid) AS username,
+    (SELECT title FROM questions WHERE questionid =  a.questionid ) AS title,
+    (SELECT description  FROM questions WHERE questionid =  a.questionid ) AS description
+  FROM 
+    answers a 
+  WHERE 
+    a.questionid = ?`,
       [questionId]
     );
-    return res.json(answers[0]);
+    if (answers[0].length > 0) {
+      return res.json(answers[0]);
+    }
+    const resp = await dbConnection.query(
+      `SELECT title, description
+FROM questions
+WHERE questionid = ?`,
+      [questionId]
+    );
+    return res.json(resp[0]);
   } catch (error) {
     console.error(error.message);
     return res

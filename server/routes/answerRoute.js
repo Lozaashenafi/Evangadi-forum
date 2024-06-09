@@ -8,6 +8,6 @@ const {
 const authMiddleware = require("../middleware/authMiddleware");
 
 router.get("/:id", getAllanswers);
-router.post("/give-answers", authMiddleware, giveAnswers);
+router.post("/give-answers", giveAnswers);
 
 module.exports = router;
