@@ -9,6 +9,7 @@ export const appState = createContext();
 
 function App() {
   const [user, serUser] = useState({});
+  const [islogedin, setIslogedin] = useState(false);
   const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
@@ -30,10 +31,10 @@ function App() {
   }, []);
   return (
     <>
-      <appState.Provider value={{ user, serUser }}>
+      <appState.Provider value={{ user, serUser, islogedin, setIslogedin }}>
         <Routes>
           <Route path="/" element={<Auth />} />
-          <Route path="/home" element={<Home />} />+
+          <Route path="/home" element={<Home />} />
           <Route path="/home/answer/:id" element={<Answer />} />
           <Route path="/home/question" element={<AddQuestion />} />
         </Routes>

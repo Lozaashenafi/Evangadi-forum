@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "../../axiosConfig";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import { appState } from "../../App";
 
 function Login({ dispatch }) {
+  const { user, setIslogedin, islogedin } = useContext(appState);
   const navigator = useNavigate();
   const emailDoc = useRef();
   const passwordDoc = useRef();
@@ -29,7 +31,8 @@ function Login({ dispatch }) {
       setSuccessMessage("Login successful");
       localStorage.setItem("token", data.token);
       navigator("/home");
-      console.log(data);
+      setIslogedin(true);
+      // console.log(data);
     } catch (error) {
       setErrorMessage(error?.response?.data?.msg);
       console.log(error.response.data);

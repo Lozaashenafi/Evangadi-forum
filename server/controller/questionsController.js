@@ -55,5 +55,32 @@ async function askQuestion(req, res) {
       .json({ msg: "Something went wrong, try again later!" });
   }
 }
+async function searchQuestions(req, res) {
+  const keyword = req.params.id;
+  if (!keyword) {
+    return res
+      .status(StatusCodes.BAD_REQUEST)
+      .json({ msg: "Keyword is required for search" });
+  }
 
-module.exports = { getAllQuestion, askQuestion };
+  try {
+    const [questions] = await dbConnection.query(
+      `
+    SELECT *, (SELECT username FROM users WHERE userid = q.userid) AS username
+FROM questions q
+WHERE title LIKE ? OR tag LIKE ?
+
+    `,
+      [`%${keyword}%`, `%${keyword}%`]
+    );
+    // console.log(questions);
+    return res.json(questions);
+  } catch (error) {
+    console.error(error.message);
+    return res
+      .status(StatusCodes.INTERNAL_SERVER_ERROR)
+      .json({ msg: "Something went wrong, try again later!" });
+  }
+}
+
+module.exports = { getAllQuestion, askQuestion, searchQuestions };

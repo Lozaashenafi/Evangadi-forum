@@ -1,10 +1,12 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import axios from "../../axiosConfig";
 import { FaRegEye, FaRegEyeSlash } from "react-icons/fa";
+import { appState } from "../../App";
 
 function Register({ dispatch }) {
+  const { user, setIslogedin, islogedin } = useContext(appState);
   const navigator = useNavigate();
   const usernameDoc = useRef();
   const firstnameDoc = useRef();
@@ -43,6 +45,7 @@ function Register({ dispatch }) {
       setSuccessMessage("Registration successful");
       localStorage.setItem("token", data.token);
       navigator("/home");
+      setIslogedin(true);
     } catch (error) {
       setErrorMessage("Something went wrong");
       console.log(error.response);
