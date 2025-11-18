@@ -4,7 +4,7 @@ import Footer from "../footer/Footer";
 
 function LayOut({ children }) {
   return (
-    <div>
+    <div className="bg-white">
       <Header />
       {children}
       <Footer />

@@ -1,15 +1,11 @@
-const express = require("express");
-const router = express.Router();
-const {
-  getAllQuestion,
-  askQuestion,
-  searchQuestions,
-} = require("../controller/questionsController");
+import { Router } from "express";
+const router = Router();
+import questionController from "../controller/questionsController.js";
 // authentication middleware
-const authMiddleware = require("../middleware/authMiddleware");
+import authMiddleware from "../middleware/authMiddleware.js";
 
-router.get("/all-questions", authMiddleware, getAllQuestion);
-router.post("/ask-question", authMiddleware, askQuestion);
-router.get("/:id", authMiddleware, searchQuestions);
+router.get("/all-questions", authMiddleware, questionController.getAllQuestion);
+router.post("/ask-question", authMiddleware, questionController.askQuestion);
+router.get("/:id", authMiddleware, questionController.searchQuestions);
 
-module.exports = router;
+export default router;

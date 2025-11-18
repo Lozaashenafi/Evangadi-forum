@@ -19,16 +19,26 @@ function AddQuestion() {
     setSelectedValue(event.target.value);
   };
   const handlePost = async () => {
-    const title = titleDoc.current.value;
-    const description = descriptionDoc.current.value;
+    const title = titleDoc.current.value.trim();
+    const description = descriptionDoc.current.value.trim();
     const tag = selectedValue;
-    const userid = user.userid;
-    // console.log(userid);
-    console.log(title, description, tag);
-    if (!title || !description || !userid) {
+    const userid = user?.userid; // optional chaining to avoid undefined
+
+    console.log({
+      title,
+      description,
+      tag,
+      user,
+      userid,
+    });
+
+    // Validate all required fields
+    if (!title || !description || !userid || !tag) {
       setErrorMessage("Please provide all required information");
+      setSuccessMessage(""); // Clear previous success
       return;
     }
+
     try {
       await axios.post(
         "/questions/ask-question",
@@ -44,12 +54,22 @@ function AddQuestion() {
           },
         }
       );
-      setSuccessMessage("posted successfuly");
+      setSuccessMessage("Posted successfully!");
+      setErrorMessage(""); // Clear previous error
+      // Optionally clear form fields
+      titleDoc.current.value = "";
+      descriptionDoc.current.value = "";
+      setSelectedValue("");
       navigator("/home");
     } catch (error) {
-      console.log(error.response);
+      console.log(error.response || error.message);
+      setErrorMessage(
+        error.response?.data?.msg || "Something went wrong. Please try again."
+      );
+      setSuccessMessage("");
     }
   };
+
   return (
     <>
       <LayOut>

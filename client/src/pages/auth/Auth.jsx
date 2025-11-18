@@ -27,7 +27,7 @@ function Auth() {
     <>
       <section>
         <LayOut>
-          <section className="flex justify-center block bg-full">
+          <section className="flex justify-center bg-white  bg-full">
             <div className="w-1/2 relative  auth  bg-left">
               <div className="w-8/12 white1  shadow absolute authEner top-0 right-6 mt-7 rounded-md custom-height">
                 {status === "login" && <Login dispatch={dispatch} />}

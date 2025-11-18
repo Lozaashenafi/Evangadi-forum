@@ -66,7 +66,7 @@ function Login({ dispatch }) {
         <form className="ml-6" onSubmit={handleSubmit}>
           <div>
             <input
-              className="border w-11/12 py-2 pl-1 inputs mb-3 text-sm"
+              className="border w-11/12 py-2 pl-1 bg-white  inputs mb-3 text-sm"
               ref={emailDoc}
               type="text"
               placeholder="Your Email"
@@ -75,7 +75,7 @@ function Login({ dispatch }) {
           <div className="relative">
             <input
               id="myInput"
-              className="border  w-11/12 py-2 pl-1 inputs mb-3 text-sm pr-10" // Added pr-10 for padding
+              className="border  w-11/12 py-2 pl-1 bg-white inputs mb-3 text-sm pr-10" // Added pr-10 for padding
               ref={passwordDoc}
               type={showPassword ? "text" : "password"}
               placeholder="Your Password"

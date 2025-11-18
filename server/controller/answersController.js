@@ -1,15 +1,12 @@
-const dbConnection = require("../db/dbConfige");
-const { StatusCodes } = require("http-status-codes");
+import { query } from "../db/dbConfige.js";
+
+import { StatusCodes } from "http-status-codes";
 
 async function getAllanswers(req, res) {
   const questionId = req.params.id;
   console.log(questionId);
   try {
-    // const answers = await dbConnection.query(
-    //   "SELECT * FROM answers WHERE questionid = ?",
-    //   [questionId]
-    // );
-    const answers = await dbConnection.query(
+    const answers = await query(
       `SELECT 
     a.*,
     (SELECT username FROM users WHERE userid = a.userid) AS username,
@@ -24,7 +21,7 @@ async function getAllanswers(req, res) {
     if (answers[0].length > 0) {
       return res.json(answers[0]);
     }
-    const resp = await dbConnection.query(
+    const resp = await query(
       `SELECT title, description
 FROM questions
 WHERE questionid = ?`,
@@ -45,7 +42,7 @@ async function giveAnswers(req, res) {
       .status(StatusCodes.BAD_REQUEST)
       .json({ msg: "Please provide all required information" });
   }
-  const [questioner] = await dbConnection.query(
+  const [questioner] = await query(
     "SELECT userid FROM questions WHERE questionid = ? ",
     [questionid]
   );
@@ -55,11 +52,11 @@ async function giveAnswers(req, res) {
       .status(StatusCodes.BAD_REQUEST)
       .json({ msg: "you ask the question" });
   }
-  const created = await dbConnection.query(
+  const created = await query(
     "INSERT INTO answers (userid, answer,  questionid) VALUES (?, ?, ?)",
     [userid, answer, questionid]
   );
   return res.status(StatusCodes.CREATED).json({ msg: "successfull" });
   //   return res.send(questioner[0]);
 }
-module.exports = { getAllanswers, giveAnswers };
+export default { getAllanswers, giveAnswers };

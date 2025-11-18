@@ -1,10 +1,10 @@
-const dbConnection = require("../db/dbConfige");
-const { StatusCodes } = require("http-status-codes");
-const { v4: uuidv4 } = require("uuid");
+import { query } from "../db/dbConfige.js";
+import { StatusCodes } from "http-status-codes";
+import { v4 as uuidv4 } from "uuid";
 
 async function getAllQuestion(req, res) {
   try {
-    const [questions] = await dbConnection.query(`
+    const [questions] = await query(`
       SELECT 
         q.*,
         (SELECT username FROM users WHERE userid = q.userid) AS username
@@ -31,7 +31,7 @@ async function askQuestion(req, res) {
     const questionId = uuidv4();
 
     // Check if the question already exists
-    const [existingQuestion] = await dbConnection.query(
+    const [existingQuestion] = await query(
       "SELECT * FROM questions WHERE title = ?",
       [title]
     );
@@ -42,7 +42,7 @@ async function askQuestion(req, res) {
     }
 
     // Insert new question into the database
-    const created = await dbConnection.query(
+    const created = await query(
       "INSERT INTO questions (title, description, userid, tag, questionid) VALUES (?, ?, ?, ?, ?)",
       [title, description, userid, tag, questionId]
     );
@@ -64,7 +64,7 @@ async function searchQuestions(req, res) {
   }
 
   try {
-    const [questions] = await dbConnection.query(
+    const [questions] = await query(
       `
     SELECT *, (SELECT username FROM users WHERE userid = q.userid) AS username
 FROM questions q
@@ -83,4 +83,4 @@ WHERE title LIKE ? OR tag LIKE ?
   }
 }
 
-module.exports = { getAllQuestion, askQuestion, searchQuestions };
+export default { getAllQuestion, askQuestion, searchQuestions };

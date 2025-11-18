@@ -1,13 +1,10 @@
-const express = require("express");
-const router = express.Router();
-const {
-  getAllanswers,
-  giveAnswers,
-} = require("../controller/answersController");
+import { Router } from "express";
+const router = Router();
+import answerController from "../controller/answersController.js";
 // authentication middleware
-const authMiddleware = require("../middleware/authMiddleware");
+import authMiddleware from "../middleware/authMiddleware.js";
 
-router.get("/:id", getAllanswers);
-router.post("/give-answers", giveAnswers);
+router.get("/:id", answerController.getAllanswers);
+router.post("/give-answers", answerController.giveAnswers);
 
-module.exports = router;
+export default router;

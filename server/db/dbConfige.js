@@ -1,18 +1,15 @@
-const mysql = require("mysql2");
-const dbconnection = mysql.createPool({
+import { createPool } from "mysql2";
+import dotenv from "dotenv";
+dotenv.config();
+
+const dbconnection = createPool({
   user: process.env.USER,
   database: process.env.DATABASE,
-  host: "localhost",
+  host: process.env.HOST || "localhost",
   password: process.env.PASSWORD,
   connectionLimit: 10,
 });
-// console.log(process.env.JWT_SECRET);
 
-// dbconnection.execute("select 'test' ", (err, result) => {
-//   if (err) {
-//     console.log(err.message);
-//   } else {
-//     console.log(result);
-//   }
-// });
-module.exports = dbconnection.promise();
+// Named exports
+export const query = (...args) => dbconnection.promise().query(...args);
+export const execute = (...args) => dbconnection.promise().execute(...args);

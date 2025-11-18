@@ -61,7 +61,7 @@ function Home() {
               <input
                 type="text"
                 placeholder="Search Questions"
-                className="border rounded-sm border-zinc-500 px-3 py-1 mr-2"
+                className="border rounded-sm border-zinc-500 px-3 bg-white py-1 mr-2"
                 onChange={(e) => handleSearch(e)}
               />
               <button type="submit">

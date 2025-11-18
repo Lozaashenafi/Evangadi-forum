@@ -1,0 +1,33 @@
+CREATE DATABASE IF NOT EXISTS stackclone;
+USE stackclone;
+
+CREATE TABLE users (
+    userid INT AUTO_INCREMENT PRIMARY KEY,
+    username VARCHAR(100) NOT NULL UNIQUE,
+    firstname VARCHAR(100) NOT NULL,
+    lastname VARCHAR(100) NOT NULL,
+    email VARCHAR(200) NOT NULL UNIQUE,
+    password VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+CREATE TABLE questions (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    questionid VARCHAR(100) NOT NULL UNIQUE,
+    userid INT NOT NULL,
+    title VARCHAR(255) NOT NULL,
+    description TEXT NOT NULL,
+    tag VARCHAR(200),
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (userid) REFERENCES users(userid) ON DELETE CASCADE
+);
+
+CREATE TABLE answers (
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    userid INT NOT NULL,
+    questionid VARCHAR(100) NOT NULL,
+    answer TEXT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (userid) REFERENCES users(userid) ON DELETE CASCADE,
+    FOREIGN KEY (questionid) REFERENCES questions(questionid) ON DELETE CASCADE
+);

@@ -79,7 +79,7 @@ function Register({ dispatch }) {
         <form className="ml-6" onSubmit={handleSubmit}>
           <div>
             <input
-              className="border  w-11/12 py-2 pl-1 inputs mb-3 text-sm"
+              className="border bg-white w-11/12 py-2 pl-1 inputs mb-3 text-sm"
               ref={emailDoc}
               type="text"
               placeholder="Email"
@@ -87,13 +87,13 @@ function Register({ dispatch }) {
           </div>
           <div className="flex gap-2  w-11/12 ">
             <input
-              className="border w-full py-2 pl-1 inputs mb-3 text-sm"
+              className="border bg-white w-full py-2 pl-1 inputs mb-3 text-sm"
               ref={firstnameDoc}
               type="text"
               placeholder="First Name"
             />
             <input
-              className="border  w-full py-2 pl-1 inputs mb-3 text-sm"
+              className="border bg-white w-full py-2 pl-1 inputs mb-3 text-sm"
               ref={lastnameDoc}
               type="text"
               placeholder="Last Name"
@@ -101,7 +101,7 @@ function Register({ dispatch }) {
           </div>
           <div>
             <input
-              className="border  w-11/12 py-2 pl-1 inputs mb-3 text-sm"
+              className="border bg-white w-11/12 py-2 pl-1 inputs mb-3 text-sm"
               ref={usernameDoc}
               type="text"
               placeholder="Username"
@@ -109,7 +109,7 @@ function Register({ dispatch }) {
           </div>
           <div className="relative">
             <input
-              className="border  w-11/12 py-2 pl-1 inputs mb-3 text-sm pr-10" // Added pr-10 for padding
+              className="border bg-white w-11/12 py-2 pl-1 inputs mb-3 text-sm pr-10" // Added pr-10 for padding
               ref={passwordDoc}
               type={showPassword ? "text" : "password"}
               placeholder="Password"

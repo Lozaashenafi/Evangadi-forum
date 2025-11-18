@@ -1,8 +1,8 @@
-const bcrypt = require("bcrypt");
-const { StatusCodes } = require("http-status-codes");
-const jwt = require("jsonwebtoken");
-// db connection
-const dbConnection = require("../db/dbConfige");
+import { genSalt, hash, compare } from "bcrypt";
+import { StatusCodes } from "http-status-codes";
+import jwt from "jsonwebtoken"; // <--- default import
+const { sign } = jwt; // db connection
+import { query } from "../db/dbConfige.js";
 
 async function register(req, res) {
   const { username, firstname, email, lastname, password } = req.body;
@@ -13,7 +13,7 @@ async function register(req, res) {
       .json({ msg: "please provide all required information" });
   }
   try {
-    const [user] = await dbConnection.query(
+    const [user] = await query(
       "select username, userid from users where username = ? or email =? ",
       [username, email]
     );
@@ -29,15 +29,15 @@ async function register(req, res) {
     }
 
     // Encrypt the password
-    const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash(password, salt);
-    await dbConnection.query(
+    const salt = await genSalt(10);
+    const hashedPassword = await hash(password, salt);
+    await query(
       "INSERT INTO users(username, firstname, lastname, email, password) VALUES (?,?,?,?,?)",
       [username, firstname, lastname, email, hashedPassword]
     );
 
     // Generate token
-    const token = jwt.sign({ username }, process.env.JWT_SECRET, {
+    const token = sign({ username }, process.env.JWT_SECRET, {
       expiresIn: "1d", // Expires in 1 day
     });
 
@@ -61,7 +61,7 @@ async function login(req, res) {
       .json({ msg: "please enter all required fields" });
   }
   try {
-    const [user] = await dbConnection.query(
+    const [user] = await query(
       "select username,userid, password from users where email= ?",
       [email]
     );
@@ -71,7 +71,7 @@ async function login(req, res) {
         .json({ msg: "invalid credential" });
     }
     // compare password
-    const isMatch = await bcrypt.compare(password, user[0].password);
+    const isMatch = await compare(password, user[0].password);
     if (!isMatch) {
       return res
         .status(StatusCodes.BAD_REQUEST)
@@ -79,7 +79,7 @@ async function login(req, res) {
     }
     const username = user[0].username;
     const userid = user[0].userid;
-    const token = jwt.sign({ username, userid }, process.env.JWT_SECRET, {
+    const token = sign({ username, userid }, process.env.JWT_SECRET, {
       expiresIn: "1d",
     }); // Expires in 1 day
 
@@ -101,4 +101,4 @@ async function checkuser(req, res) {
   res.status(StatusCodes.OK).json({ msg: "valid user ", username, userid });
 }
 
-module.exports = { register, login, checkuser };
+export default { register, login, checkuser };
