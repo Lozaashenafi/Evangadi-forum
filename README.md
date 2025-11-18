@@ -49,3 +49,7 @@ These instructions will help you set up the project on your local machine.
    git clone https://github.com/your-username/evangadi-forum.git
    cd evangadi-forum/server
    ```
+
+## 📸 Screenshot
+
+![Evangadi Forum Screenshot](./client/src/assets/Screenshot.png)
